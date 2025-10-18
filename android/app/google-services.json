@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "161862354786",
+    "firebase_url": "https://uni-food-flutter-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "uni-food-flutter",
+    "storage_bucket": "uni-food-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161862354786:android:9fde75e13f52e112df8e3b",
+        "android_client_info": {
+          "package_name": "com.example.unifood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161862354786-cki5erelvv5ch1euj74b2kacc6f74t5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.unifood",
+            "certificate_hash": "e8bbf8221ba7a0d322496251862182305988a7cf"
+          }
+        },
+        {
+          "client_id": "161862354786-6kneg46dkfoi48851u851vik201sqlv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg7zdnHzlw9tr5Pk92Ow0WjI7dt7jjAR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161862354786-6kneg46dkfoi48851u851vik201sqlv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161862354786:android:2f53946db0f8974fdf8e3b",
+        "android_client_info": {
+          "package_name": "com.example.unifoodadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161862354786-6kneg46dkfoi48851u851vik201sqlv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg7zdnHzlw9tr5Pk92Ow0WjI7dt7jjAR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161862354786-6kneg46dkfoi48851u851vik201sqlv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
