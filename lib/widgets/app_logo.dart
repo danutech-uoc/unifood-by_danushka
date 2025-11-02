@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AppLogo extends StatelessWidget {
   final double size;
@@ -51,17 +52,17 @@ class AppLogo extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Icon
+                // Custom Logo from assets
                 Container(
-                  padding: EdgeInsets.all(size * 0.15),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(size * 0.1),
-                  ),
-                  child: Icon(
-                    Icons.restaurant,
-                    color: Colors.white,
-                    size: size * 0.4,
+                  padding: EdgeInsets.all(size * 0.1),
+                  child: SvgPicture.asset(
+                    'assets/logo.svg',
+                    width: size * 0.6,
+                    height: size * 0.6,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
                 

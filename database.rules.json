@@ -1,54 +1,190 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true,
+    ".read": "auth != null",
+    ".write": "auth != null",
     
     "preorders": {
-      ".read": "auth != null",
-      ".write": "auth != null",
-      "$orderId": {
+      "$date": {
         ".read": "auth != null",
-        ".write": "auth != null && (!data.exists() || data.child('userId').val() === auth.uid)",
-        ".validate": "newData.hasChildren(['orderId', 'userId', 'userEmail', 'userName', 'orderDate', 'mealType', 'foodType', 'amount', 'status'])",
-        "orderId": {
-          ".validate": "newData.isString()"
-        },
-        "userId": {
-          ".validate": "newData.isString() && newData.val() === auth.uid"
-        },
-        "userEmail": {
-          ".validate": "newData.isString()"
-        },
-        "userName": {
-          ".validate": "newData.isString()"
-        },
-        "orderDate": {
-          ".validate": "newData.isString()"
-        },
-        "orderTime": {
-          ".validate": "newData.isNumber() || !newData.exists()"
-        },
-        "mealType": {
-          ".validate": "newData.isString()"
-        },
-        "foodType": {
-          ".validate": "newData.isString()"
-        },
-        "amount": {
-          ".validate": "newData.isNumber() && newData.val() >= 0"
-        },
-        "status": {
-          ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'completed' || newData.val() === 'cancelled')"
-        },
-        "deadline": {
-          ".validate": "newData.isNumber()"
+        "$orderId": {
+          ".read": "auth != null",
+          ".write": "auth != null && (!data.exists() || data.child('userId').val() === auth.uid)",
+          ".validate": "newData.hasChildren(['orderId', 'userId', 'userEmail', 'userName', 'orderDate', 'mealType', 'foodType', 'status'])",
+          "orderId": {
+            ".validate": "newData.isString()"
+          },
+          "userId": {
+            ".validate": "newData.isString() && newData.val() === auth.uid"
+          },
+          "userEmail": {
+            ".validate": "newData.isString()"
+          },
+          "userName": {
+            ".validate": "newData.isString()"
+          },
+          "orderDate": {
+            ".validate": "newData.isString()"
+          },
+          "orderTime": {
+            ".validate": "newData.isNumber() || !newData.exists()"
+          },
+          "mealType": {
+            ".validate": "newData.isString()"
+          },
+          "foodType": {
+            ".validate": "newData.isString()"
+          },
+          "status": {
+            ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'completed' || newData.val() === 'cancelled')"
+          },
+          "deadline": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+    
+    "daily_meal_counts": {
+      "$date": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$mealType": {
+          "$foodType": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
         }
       }
     },
     
     "canteen_analytics": {
       ".read": "auth != null",
-      ".write": "auth != null"
+      ".write": "auth != null",
+      "todayOrders": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "totalRevenue": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "breakfastOrders": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "lunchOrders": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      },
+      "dinnerOrders": {
+        ".validate": "newData.isNumber() && newData.val() >= 0"
+      }
+    },
+    
+    "order_deadlines": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$mealType": {
+        ".validate": "newData.hasChildren(['startTime', 'endTime', 'description', 'isActive'])",
+        "startTime": {
+          ".validate": "newData.isString()"
+        },
+        "endTime": {
+          ".validate": "newData.isString()"
+        },
+        "description": {
+          ".validate": "newData.isString()"
+        },
+        "isActive": {
+          ".validate": "newData.isBoolean()"
+        }
+      }
+    },
+    
+    "system_config": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "mealPrices": {
+        "$mealType": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      },
+      "dataRetentionDays": {
+        ".validate": "newData.isNumber() && newData.val() >= 1"
+      },
+      "cleanupSchedule": {
+        ".validate": "newData.isString()"
+      },
+      "lastUpdated": {
+        ".validate": "newData.isNumber()"
+      }
+    },
+    
+    "cleanup_logs": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$logId": {
+        ".validate": "newData.hasChildren(['timestamp', 'status', 'message', 'date'])",
+        "timestamp": {
+          ".validate": "newData.isNumber()"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'completed' || newData.val() === 'error')"
+        },
+        "message": {
+          ".validate": "newData.isString()"
+        },
+        "date": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    
+    "meal_selections": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$userId": {
+        ".read": "auth != null && auth.uid === $userId",
+        ".write": "auth != null && auth.uid === $userId"
+      }
+    },
+    
+    "meal_counts": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$date": {
+        "$mealType": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+    
+    "food_category_counts": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$date": {
+        "$category": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        }
+      }
+    },
+    
+    "users": {
+      ".read": "auth != null",
+      "$userId": {
+        ".read": "auth != null && (auth.uid === $userId)",
+        ".write": "auth != null && auth.uid === $userId",
+        "uid": {
+          ".validate": "newData.isString() && newData.val() === auth.uid"
+        },
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "displayName": {
+          ".validate": "newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "lastLoginAt": {
+          ".validate": "newData.isNumber()"
+        }
+      }
     }
   }
 }

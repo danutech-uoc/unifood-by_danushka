@@ -501,45 +501,24 @@ class _UnifiedLoginScreenState extends State<UnifiedLoginScreen> with TickerProv
               
               const SizedBox(height: 16),
               
-              // Quick Fill Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        _emailController.text = 'admin@gmail.com';
-                        _passwordController.text = '123456';
-                      },
-                      icon: const Icon(Icons.admin_panel_settings, size: 16),
-                      label: const Text('Admin Fill'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.green,
-                        side: const BorderSide(color: Colors.green),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+              // Clear Button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    _emailController.clear();
+                    _passwordController.clear();
+                  },
+                  icon: const Icon(Icons.clear, size: 16),
+                  label: const Text('Clear'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.grey,
+                    side: const BorderSide(color: Colors.grey),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        _emailController.clear();
-                        _passwordController.clear();
-                      },
-                      icon: const Icon(Icons.clear, size: 16),
-                      label: const Text('Clear'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.grey,
-                        side: const BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
               
               const SizedBox(height: 24),

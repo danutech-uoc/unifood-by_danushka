@@ -28,13 +28,13 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
     'dinner': '',
   };
   
-  // Predefined food types with prices
-  final Map<String, int> _foodTypePrices = {
-    'Vegetable': 50,
-    'Chicken': 80,
-    'Fish': 90,
-    'Egg': 40,
-  };
+  // Predefined food types
+  final List<String> _foodTypes = [
+    'Vegetable',
+    'Chicken', 
+    'Fish',
+    'Egg',
+  ];
   
   bool _isLoading = true;
   String _errorMessage = '';
@@ -57,7 +57,7 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
 
       // Use predefined food types instead of loading from database
       setState(() {
-        _mealPrices = _foodTypePrices;
+        _mealPrices = {};
       });
     } catch (e) {
       setState(() {
@@ -124,7 +124,7 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
     return '${hours}h ${minutes}m';
   }
 
-  List<String> get _availableFoodTypes => _foodTypePrices.keys.toList();
+  List<String> get _availableFoodTypes => _foodTypes;
 
   @override
   Widget build(BuildContext context) {
@@ -368,7 +368,6 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
               spacing: 8,
               runSpacing: 8,
               children: _availableFoodTypes.map((foodType) {
-                final price = _foodTypePrices[foodType] ?? 0;
                 final isSelected = _selectedFoodTypes[mealType] == foodType;
                 return GestureDetector(
                   onTap: () {
@@ -386,34 +385,15 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
                         width: isSelected ? 2 : 1,
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          foodType,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected ? Colors.green.shade700 : Colors.black87,
-                          ),
+                    child: Center(
+                      child: Text(
+                        foodType,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: isSelected ? Colors.green.shade700 : Colors.black87,
                         ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: isSelected ? Colors.green : Colors.grey.shade400,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            'Rs. $price',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -447,7 +427,6 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
       for (final mealType in _selectedMeals.keys) {
         if (_selectedMeals[mealType] == true && _selectedFoodTypes[mealType]!.isNotEmpty) {
           final foodType = _selectedFoodTypes[mealType]!;
-          final price = _foodTypePrices[foodType] ?? 0;
           
           // Determine the correct date for the order
           // Breakfast is for tomorrow, lunch and dinner are for today
@@ -462,7 +441,6 @@ class _MealSelectionScreenState extends State<MealSelectionScreen> {
           
           final mealData = {
             'mealType': foodType,
-            'price': price,
             'description': 'Delicious $foodType for $mealType',
           };
 

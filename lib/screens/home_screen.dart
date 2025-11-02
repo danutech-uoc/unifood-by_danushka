@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'meal_selection_screen.dart';
 import 'profile_screen.dart';
-import 'canteen_analytics_screen.dart';
 import 'help_screen.dart';
 import '../admin/admin_dashboard_screen.dart';
 

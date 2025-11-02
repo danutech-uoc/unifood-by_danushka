@@ -1,7 +1,7 @@
 name: unifood
-description: UniFood Canteen Management System - A Flutter app for managing university canteen meal orders with real-time analytics.
+description: UniFood - University Canteen Ordering App. A Flutter app for students to order meals from university canteens with easy Google sign-in and meal scheduling.
 
-publish_to: 'none'
+publish_to: 'none'  # Set to 'pub.dev' when ready to publish
 
 version: 1.0.0+1
 
@@ -22,6 +22,9 @@ dependencies:
   
   # URL Launcher
   url_launcher: ^6.2.5
+  
+  # SVG Support
+  flutter_svg: ^2.0.9
 
   # UI
   cupertino_icons: ^1.0.8
@@ -31,6 +34,16 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/logo.png"
+  min_sdk_android: 21
+  prefix: "Icon"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logo.png"
 
 flutter:
   uses-material-design: true

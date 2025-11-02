@@ -66,6 +66,8 @@ class DatabaseService {
       // Generate order ID
       final orderId = '${userId}_${DateTime.now().millisecondsSinceEpoch}_$mealType';
 
+      final deadline = await _getMealDeadlineFromConfig(mealType, dateString: dateString);
+
       final orderData = {
         'orderId': orderId,
         'userId': userId,
@@ -75,16 +77,20 @@ class DatabaseService {
         'orderTime': ServerValue.timestamp,
         'mealType': mealType,
         'foodType': mealData['mealType'],
-        'amount': mealData['price'],
         'status': 'pending',
-        'deadline': _getMealDeadline(mealType).millisecondsSinceEpoch,
+        'deadline': deadline.millisecondsSinceEpoch,
       };
+      
+      // Add amount if it exists
+      if (mealData['price'] != null) {
+        orderData['amount'] = mealData['price'];
+      }
 
       // Save order under date structure
       await _database.child('preorders').child(dateString).child(orderId).set(orderData);
 
       // Update analytics
-      await _updateAnalytics(mealType, mealData['mealType'], mealData['price']);
+      await _updateAnalytics(mealType, mealData['mealType'], mealData['price'] ?? 0);
 
       return true;
     } catch (e) {
@@ -166,19 +172,72 @@ class DatabaseService {
     }
   }
 
-  // Get meal deadline
-  DateTime _getMealDeadline(String mealType) {
-    final now = DateTime.now();
-    if (mealType.toLowerCase() == 'breakfast') {
-      // Breakfast deadline: 11 PM same day
-      return DateTime(now.year, now.month, now.day, 23, 0);
-    } else if (mealType.toLowerCase() == 'lunch') {
-      // Lunch deadline: 11 AM same day
-      return DateTime(now.year, now.month, now.day, 11, 0);
-    } else {
-      // Dinner deadline: 6 PM same day
-      return DateTime(now.year, now.month, now.day, 18, 0);
+  // Compute deadline from configured order_deadlines for consistency with UI
+  // If ordering for a specific date, compute the deadline relative to that date:
+  // - breakfast: deadline is previous day at configured endTime (order tomorrow's breakfast today)
+  // - lunch/dinner: deadline is same day at configured endTime
+  Future<DateTime> _getMealDeadlineFromConfig(String mealType, {String? dateString}) async {
+    DateTime targetDate;
+    // Try to parse the provided date (expects ISO-like format). If parsing fails, use today.
+    try {
+      if (dateString != null && dateString.isNotEmpty) {
+        targetDate = DateTime.parse(dateString);
+      } else {
+        final now = DateTime.now();
+        targetDate = DateTime(now.year, now.month, now.day);
+      }
+    } catch (_) {
+      final now = DateTime.now();
+      targetDate = DateTime(now.year, now.month, now.day);
     }
+
+    String normalizedMeal = mealType.toLowerCase();
+    int endHour = 0;
+    int endMinute = 0;
+
+    try {
+      final snapshot = await _database.child('order_deadlines').child(normalizedMeal).once();
+      if (snapshot.snapshot.exists) {
+        final data = Map<String, dynamic>.from(snapshot.snapshot.value as Map);
+        final String endTimeRaw = (data['endTime'] as String? ?? '00:00').trim();
+        final parts = endTimeRaw.split(':');
+        endHour = int.parse(parts[0]);
+        endMinute = int.parse(parts[1]);
+      } else {
+        // fall through to defaults below
+        endHour = -1; // signal to use defaults
+      }
+    } catch (_) {
+      endHour = -1; // signal to use defaults
+    }
+
+    if (endHour < 0) {
+      // Fallback to sensible defaults matching initializeDatabase
+      switch (normalizedMeal) {
+        case 'breakfast':
+          endHour = 23; endMinute = 0; // previous day 23:00
+          break;
+        case 'lunch':
+          endHour = 10; endMinute = 0; // same day 10:00
+          break;
+        case 'dinner':
+        default:
+          endHour = 16; endMinute = 0; // same day 16:00
+          break;
+      }
+    }
+
+    // Compute deadline date relative to the target order date
+    DateTime deadlineBaseDate;
+    if (normalizedMeal == 'breakfast') {
+      // deadline is the day before the target date
+      deadlineBaseDate = targetDate.subtract(const Duration(days: 1));
+    } else {
+      // lunch/dinner => same day
+      deadlineBaseDate = targetDate;
+    }
+
+    return DateTime(deadlineBaseDate.year, deadlineBaseDate.month, deadlineBaseDate.day, endHour, endMinute);
   }
 
   // Check if user has already ordered for a specific date and meal type
