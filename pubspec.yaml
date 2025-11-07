@@ -3,7 +3,7 @@ description: UniFood - University Canteen Ordering App. A Flutter app for studen
 
 publish_to: 'none'  # Set to 'pub.dev' when ready to publish
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

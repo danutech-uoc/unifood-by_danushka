@@ -45,12 +45,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:161862354786:android:2f53946db0f8974fdf8e3b",
+        "mobilesdk_app_id": "1:161862354786:android:4c1e31b3a25239d6df8e3b",
         "android_client_info": {
-          "package_name": "com.example.unifoodadmin"
+          "package_name": "com.unifood.app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "161862354786-cacsintopotl3vg843nfm2nmd39l63fm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unifood.app",
+            "certificate_hash": "e8bbf8221ba7a0d322496251862182305988a7cf"
+          }
+        },
         {
           "client_id": "161862354786-6kneg46dkfoi48851u851vik201sqlv5.apps.googleusercontent.com",
           "client_type": 3
